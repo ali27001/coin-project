@@ -8,12 +8,6 @@ import {currentFixed} from "../utils";
 const dateFormat = 'DD-MM-YYYY';
 const columns = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <a>{text}</a>,
-    },
-    {
         title: 'İd',
         dataIndex: 'id',
         key: 'id',
@@ -38,6 +32,12 @@ const columns = [
         key: 'atl',
         dataIndex: 'atl',
         render: atl =>  <span>{currentFixed(atl)  + "$"}</span>
+    },
+    {
+        title: 'en yüksek tarih',
+        dataIndex: 'ath_date',
+        key: 'ath_date',
+        render: alh_date =>  <span>{moment(alh_date).format(dateFormat)}</span>
     },
     {
         title: 'en yüksek değeri',
