@@ -36,8 +36,8 @@ const CoinFrom = ({setMarketData, marketData}) => {
     }
     const onFinish = (values) => {
         console.log('Success:', values);
-        let coinDate = values.customDate || []
-        coinDate = genesisDateShow ? setQueryDate(findATLDate(values.coinName)) :  setQueryDate(coinDate.format(dateFormat));
+         let coinDate =  genesisDateShow ? findATLDate(values.coinName) :  values.customDate.format(dateFormat);
+        setQueryDate(coinDate)
         axios(`https://api.coingecko.com/api/v3/coins/${values.coinName}/history?date=${coinDate}`)
         .then(response =>{
             setData(response.data)
@@ -133,7 +133,7 @@ const CoinFrom = ({setMarketData, marketData}) => {
                 </Button>
             </Form.Item>
         </Form>
-            <RequestedInfo />
+           {data && <RequestedInfo queryDate={queryDate}  dataName={data.name} dataPriceUsd={currentFixed(data.market_data.current_price.usd)} dataImg={data.image}/>}
        </>
     );
 };
