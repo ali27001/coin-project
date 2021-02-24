@@ -26,26 +26,43 @@ const CoinFrom = ({setMarketData, marketData}) => {
     const [data, setData] = useState(null) //history
     const [genesisDateShow, setGenessisDateShow] = useState(true)
     console.log("data",data)
-    const [queryDate, setQueryDate] = useState(null)
+    const [queryDate, setQueryDate] = useState(moment().format(dateFormat))
     const [coinNames, setCoinNames] = useState([]);
-
+    const [currentAmountUsd, setCurrentAmountUsd] = useState(null)
     // istenilen coin tipinin en düşük değerinin tarihini buldu
     const findATLDate = (coinID) => {
         let ATLDate = marketData?.filter((c) => c.id == coinID )[0]?.atl_date
         return moment(ATLDate).format(dateFormat);
     }
+
+
     const onFinish = (values) => {
+        const result = marketData.filter(c => c.id === values.coinName);
+        setCurrentAmountUsd(result[0].current_price)
         console.log('Success:', values);
-         let coinDate =  genesisDateShow ? findATLDate(values.coinName) :  values.customDate.format(dateFormat);
+         let coinDate =  genesisDateShow ? findATLDate(values.coinName) : values.customDate ? values.customDate.format(dateFormat)  : moment().format(dateFormat) ;
         setQueryDate(coinDate)
-        axios(`https://api.coingecko.com/api/v3/coins/${values.coinName}/history?date=${coinDate}`)
-        .then(response =>{
-            setData(response.data)
-        })
-        .catch(error =>{
-            console.error(error)
-            console.log("hata oldu")
-        })
+        if(moment().format(dateFormat) === coinDate) {
+            let dataObject = {
+                image: result[0].image,
+                name: result[0].name,
+                market_data: {
+                    current_price:{ usd: result[0].current_price}
+                }
+            }
+            setData(dataObject);
+        }
+        else {
+            axios(`https://api.coingecko.com/api/v3/coins/${values.coinName}/history?date=${coinDate}`)
+                .then(response => {
+                    console.log(response.data)
+                    setData(response.data)
+                })
+                .catch(error => {
+                    console.error(error)
+                    console.log("hata oldu")
+                })
+        }
     }
 
     const onFinishFailed = (errorInfo) => {
@@ -53,7 +70,6 @@ const CoinFrom = ({setMarketData, marketData}) => {
     };
 
     function onChangeGenesisDate(e) {
-        console.log(`checked = ${e.target.checked}`)
         setGenessisDateShow(e.target.checked)
     }
     const setCoinNameInput = () => {
@@ -118,7 +134,7 @@ const CoinFrom = ({setMarketData, marketData}) => {
                 ]}
                 style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
             >
-                <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow} />
+                <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow}/>
             </Form.Item>
             <Form.Item
                     name="genesisDate"
@@ -133,7 +149,7 @@ const CoinFrom = ({setMarketData, marketData}) => {
                 </Button>
             </Form.Item>
         </Form>
-           {data && <RequestedInfo queryDate={queryDate}  dataName={data.name} dataPriceUsd={currentFixed(data.market_data.current_price.usd)} dataImg={data.image}/>}
+           {data && <RequestedInfo queryDate={queryDate}  dataName={data.name} dataPriceUsd={data.market_data.current_price.usd } dataImg={data.image} currentAmountUsd={currentAmountUsd}/>}
        </>
     );
 };

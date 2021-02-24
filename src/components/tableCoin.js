@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'antd/dist/antd.css';
-import {Table, Tag, Space, Image} from 'antd';
+import {Table, Tag, Space, Image, Input} from 'antd';
 import * as moment from "moment";
 import {currentFixed} from "../utils";
 
@@ -49,7 +49,7 @@ const columns = [
         title: 'Güncel fiyat',
         key: 'current_price',
         dataIndex: 'current_price' ,
-        render: current_price =>  <span>{currentFixed(current_price) + " $"}</span>
+        render: current_price =>  <span style={{color:"#16c784", fontWeight:"bold"}}>{currentFixed(current_price) + " $"}</span>
     },
     {
         title: 'Değişim %(en düşük değer ile güncel fiyat)',
@@ -60,8 +60,23 @@ const columns = [
 ];
 
 const TableCoin = ({marketData}) => {
+    const [filtredData, setFilteredData] = useState(null)
+    const searchHandle = (value) => {
+        let result = marketData.filter(c => c.id.includes(value) || c.symbol.includes(value))
+        setFilteredData(result);
+    }
+
     return(
-        <Table columns={columns} dataSource={marketData} />
+        <>
+            <Input
+                style={{ border: "3px solid  #16c784", margin: "0 0 10px 0" }}
+                placeholder="Search by id"
+                onChange={(e) => searchHandle(e.target.value)}
+
+            />
+        <Table columns={columns} dataSource={filtredData === null ? marketData : filtredData} />
+        {/*<Table columns={columns} dataSource={marketData} />*/}
+        </>
     )
 }
 export default TableCoin
