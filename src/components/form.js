@@ -1,6 +1,6 @@
 import React, { useState ,useEffect} from 'react';
 import {Form, Input, Button, Image, Checkbox, Select} from 'antd';
-import RequestedInfo from './RequestedInfo.js';
+import RequestedInfo from './requestedInfo.js';
 import axios from 'axios';
 import DatePicker from "antd/es/date-picker";
 import * as moment from "moment";
