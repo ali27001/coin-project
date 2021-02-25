@@ -9,9 +9,9 @@ const dateFormat = 'DD-MM-YYYY';
 const columns = [
     {
         title: 'İd',
-        dataIndex: 'id',
+        dataIndex: ['id',"symbol"],
         key: 'id',
-        render: text => <a>{text}</a>,
+        render: (text,row) => <a title={row["symbol"]}>{row["id"]}</a>,
     },
     {
         title: 'image',
