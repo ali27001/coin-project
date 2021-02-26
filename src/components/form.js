@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import {Form, Input, Button, Image, Checkbox, Select} from 'antd';
+import {Form, Input, Button, Image, Checkbox, Select, Col, Row,Typography} from 'antd';
 import RequestedInfo from './requestedInfo.js';
 import axios from 'axios';
 import DatePicker from "antd/es/date-picker";
@@ -21,6 +21,7 @@ const tailLayout = {
         span: 16,
     },
 };
+const { Title } = Typography;
 const dateFormat = 'DD-MM-YYYY';
 const CoinFrom = ({setMarketData, marketData}) => {
     const [data, setData] = useState(null) //history
@@ -91,64 +92,69 @@ const CoinFrom = ({setMarketData, marketData}) => {
     },[marketData])
     return (
        <>
-        <Form
-            {...layout}
-            name="basic"
-            initialValues={{
-                remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
+        <Col span={12}>
+            <Title level={4}>Coin History & Price</Title>
+            <Form
+                {...layout}
+                name="basic"
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                style={{ textAlign: 'Left' }}
+            >
 
-            <Form.Item
-                label="Coin Adı"
-                name="coinName"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your date!',
-                    },
-                ]}
-            >
-                <Select
-                    showSearch
-                    style={{ width: 200 }}
-                    placeholder="Coin Adı Seçiniz"
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
+                <Form.Item
+                    label="Coin Adı"
+                    name="coinName"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your date!',
+                        },
+                    ]}
                 >
-                    {coinNames.map(c => (c) )}
-                </Select>
-            </Form.Item>
-            <Form.Item label="coin tarihi" style={{ marginBottom: 0 }}>
-            <Form.Item
-                name="customDate"
-                rules={[
-                    {
-                        required: false,
-                        message: 'Please input your date!',
-                    },
-                ]}
-                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-            >
-                <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow}/>
-            </Form.Item>
-            <Form.Item
-                    name="genesisDate"
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
-            >
-                <Checkbox onChange={onChangeGenesisDate} defaultChecked={genesisDateShow}>En düşük olduğu tarih</Checkbox>
-            </Form.Item>
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-            </Form.Item>
-        </Form>
+                    <Select
+                        showSearch
+                        style={{ width: 200 }}
+                        placeholder="Coin Adı Seçiniz (id)"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {coinNames.map(c => (c) )}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="coin tarihi" style={{ marginBottom: 0 }}>
+                <Form.Item
+                    name="customDate"
+                    rules={[
+                        {
+                            required: false,
+                            message: 'Please input your date!',
+                        },
+                    ]}
+                    style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+
+                >
+                    <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow}/>
+                </Form.Item>
+                <Form.Item
+                        name="genesisDate"
+                        style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                >
+                    <Checkbox onChange={onChangeGenesisDate} defaultChecked={genesisDateShow}>En düşük olduğu tarih</Checkbox>
+                </Form.Item>
+                </Form.Item>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Col>
            {data && <RequestedInfo queryDate={queryDate}  dataName={data.name} dataPriceUsd={data.market_data.current_price.usd } dataImg={data.image} currentAmountUsd={currentAmountUsd}/>}
        </>
     );
