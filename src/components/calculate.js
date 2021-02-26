@@ -17,14 +17,14 @@ const Calculate = () => {
     const [calculateObj, setCalculateObj] = useState({
         firstValue: '',
         lastValue:'',
-        difference: '',
-        rateOfChange: '',
+        investment : '',
+
     })
     console.log("sy",typeof calculateObj.lastValue)
     let rateOfChange = ((calculateObj.lastValue - calculateObj.firstValue) / calculateObj.firstValue) * 100
     let difference = calculateObj.lastValue - calculateObj.firstValue
-console.log("difference",typeof difference)
-    console.log("calculateObj",calculateObj)
+    let investment = (rateOfChange * calculateObj.investment)/100 // (-50 yüzde x 100 TL yatırdım)/ 100   = 50 TL zarar
+
     const onFinish = (values) => {
     };
 
@@ -35,7 +35,7 @@ console.log("difference",typeof difference)
 
     return (
         <>
-            <Title level={4}>Coin History & Price</Title>
+            <Title level={4}>Calculate</Title>
 
             <Form
             {...layout}
@@ -74,14 +74,29 @@ console.log("difference",typeof difference)
                 <Input onChange={ e => setCalculateObj({ ... calculateObj, ["lastValue"]: parseInt(e.target.value) }) }  />
             </Form.Item>
 
-                <Row>
+            <Form.Item
+                    label="Yatırım $"
+                    name="investment"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Son değer giriniz!',
+                        },
+                    ]}
+                >
+                    <Input onChange={ e => setCalculateObj({ ... calculateObj, ["investment"]: parseInt(e.target.value) }) }  />
+            </Form.Item>
+
+                <Form.Item>
+             <Row>
                 <Col span={12}>
                     <Text>Değişim Oranı: { rateOfChange ? <span style={{color: rateOfChange < 0 ? "red" : "#16c784", fontWeight:"bold"}}> {rateOfChange + " % "} </span> : null} </Text>
                 </Col>
                 <Col span={12}>
-                    <Text>Fark: {isNaN(difference) ? null : difference} </Text>
+                    <Text>Kar/Zarar Miktarı $: {isNaN(investment) ? null : <span style={{color: investment < 0 ? "red" : "#16c784", fontWeight:"bold"}}> {investment} </span>} </Text>
                 </Col>
-                </Row>
+             </Row>
+                </Form.Item>
 
 
         </Form>
