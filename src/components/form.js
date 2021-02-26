@@ -5,6 +5,7 @@ import axios from 'axios';
 import DatePicker from "antd/es/date-picker";
 import * as moment from "moment";
 import {currentFixed} from "../utils";
+import Calculate from "./calculate";
 const { Option } = Select;
 
 const layout = {
@@ -92,69 +93,75 @@ const CoinFrom = ({setMarketData, marketData}) => {
     },[marketData])
     return (
        <>
-        <Col span={12}>
-            <Title level={4}>Coin History & Price</Title>
-            <Form
-                {...layout}
-                name="basic"
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                style={{ textAlign: 'Left' }}
-            >
-
-                <Form.Item
-                    label="Coin Adı"
-                    name="coinName"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your date!',
-                        },
-                    ]}
+           <Row gutter={[16, 16]}>
+            <Col span={12}>
+                <Title level={4}>Coin History & Price</Title>
+                <Form
+                    {...layout}
+                    name="basic"
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    style={{ textAlign: 'Left' }}
                 >
-                    <Select
-                        showSearch
-                        style={{ width: 200 }}
-                        placeholder="Coin Adı Seçiniz (id)"
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+
+                    <Form.Item
+                        label="Coin Adı"
+                        name="coinName"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your date!',
+                            },
+                        ]}
                     >
-                        {coinNames.map(c => (c) )}
-                    </Select>
-                </Form.Item>
-                <Form.Item label="coin tarihi" style={{ marginBottom: 0 }}>
-                <Form.Item
-                    name="customDate"
-                    rules={[
-                        {
-                            required: false,
-                            message: 'Please input your date!',
-                        },
-                    ]}
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                        <Select
+                            showSearch
+                            style={{ width: 200 }}
+                            placeholder="Coin Adı Seçiniz (id)"
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            {coinNames.map(c => (c) )}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="coin tarihi" style={{ marginBottom: 0 }}>
+                    <Form.Item
+                        name="customDate"
+                        rules={[
+                            {
+                                required: false,
+                                message: 'Please input your date!',
+                            },
+                        ]}
+                        style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
 
-                >
-                    <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow}/>
-                </Form.Item>
-                <Form.Item
-                        name="genesisDate"
-                        style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
-                >
-                    <Checkbox onChange={onChangeGenesisDate} defaultChecked={genesisDateShow}>En düşük olduğu tarih</Checkbox>
-                </Form.Item>
-                </Form.Item>
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
-            </Form>
-        </Col>
+                    >
+                        <DatePicker  defaultValue={moment()} format={dateFormat} disabled={genesisDateShow}/>
+                    </Form.Item>
+                    <Form.Item
+                            name="genesisDate"
+                            style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                    >
+                        <Checkbox onChange={onChangeGenesisDate} defaultChecked={genesisDateShow}>En düşük olduğu tarih</Checkbox>
+                    </Form.Item>
+                    </Form.Item>
+                    <Form.Item {...tailLayout}>
+                        <Button type="primary" htmlType="submit">
+                            Search
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Col>
+
+           <Col span={12}>
+            <Calculate/>
+           </Col>
+           </Row>
            {data && <RequestedInfo queryDate={queryDate}  dataName={data.name} dataPriceUsd={data.market_data.current_price.usd } dataImg={data.image} currentAmountUsd={currentAmountUsd}/>}
        </>
     );
