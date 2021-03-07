@@ -1,3 +1,16 @@
+# Coin Project Özeti
+Bu projede bitcoin ve alt coinlerin tablo ile 
+- en düşük - en yüksek değerlerini,
+- hangi tarihte en yüksek ve en düşük olduğunu,
+- başlangıçtan bugüne kadar yüzde kaç değiştiğini
+- anlık değerini
+
+tarih seçerek istediğiniz coinin x tarihinde 1000$ yatırsaydınız şuanda ne kadar yatırımınız olacağını gösterir.
+
+al - sat değerleri girerek bu işlemelrden ne kadar kar zarar yapacağınızı hesaplayabilirsiniz
+
+proje linki : https://coinproject.netlify.app/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
